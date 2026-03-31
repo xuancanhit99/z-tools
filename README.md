@@ -36,6 +36,8 @@ packages/
 
 ```bash
 pnpm install
+docker compose up -d postgres
+DATABASE_URL=postgresql://hyperz:hyperz_dev_password@localhost:5432/hyperz pnpm --filter @hyperz/api migration:run
 pnpm dev
 ```
 
@@ -45,6 +47,10 @@ Expected dev ports:
 - API: `8080`
 
 For container-based local setup, copy `.env.example` to `.env` and use `docker compose up -d`.
+
+Default local auth seed (when `AUTH_SEED_ENABLED=true`):
+- email: `admin@hyperz.local`
+- password: `admin123`
 
 ## Engineering Rules
 
@@ -57,4 +63,5 @@ For container-based local setup, copy `.env.example` to `.env` and use `docker c
 
 - Architecture baseline: [docs/architecture-baseline.md](./docs/architecture-baseline.md)
 - API contracts draft: [docs/api-contracts.md](./docs/api-contracts.md)
+- Sprint 1 implementation guidance: [docs/sprint1-implementation-guidance.md](./docs/sprint1-implementation-guidance.md)
 - Contribution guide: [CONTRIBUTING.md](./CONTRIBUTING.md)

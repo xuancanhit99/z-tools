@@ -1,0 +1,9 @@
+.git
+.turbo
+node_modules
+**/node_modules
+**/.next
+**/dist
+pnpm-debug.log*
+npm-debug.log*
+yarn-error.log*

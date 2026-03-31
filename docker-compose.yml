@@ -1,28 +1,46 @@
 services:
   fe:
-    image: nginx:1.27-alpine
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    image: hyperz-fe:local
     container_name: hyperz-fe
     restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8080/api/v1}
+      NEXT_PUBLIC_USE_MOCK_API: ${NEXT_PUBLIC_USE_MOCK_API:-true}
     ports:
-      - "${FE_PORT:-3000}:80"
+      - "${FE_PORT:-3000}:3000"
     depends_on:
       be:
-        condition: service_started
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3000"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
     networks:
       - app
 
   be:
-    image: node:20-alpine
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    image: hyperz-be:local
     container_name: hyperz-be
     restart: unless-stopped
-    command:
-      - sh
-      - -c
-      - |
-        node -e "const http=require('http');const payload=JSON.stringify({service:'be',status:'ok'});http.createServer((req,res)=>{res.writeHead(200,{'Content-Type':'application/json'});res.end(payload);}).listen(8080,'0.0.0.0');"
     environment:
+      NODE_ENV: production
+      PORT: 8080
       APP_ENV: ${APP_ENV:-local}
       LOG_LEVEL: ${LOG_LEVEL:-info}
+      JWT_SECRET: ${JWT_SECRET:-hyperz-dev-jwt-secret}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1h}
+      AUTH_SEED_ENABLED: ${AUTH_SEED_ENABLED:-true}
+      AUTH_SEED_EMAIL: ${AUTH_SEED_EMAIL:-admin@hyperz.local}
+      AUTH_SEED_PASSWORD: ${AUTH_SEED_PASSWORD:-admin123}
+      AUTH_SEED_ROLE: ${AUTH_SEED_ROLE:-admin}
       DATABASE_URL: ${DATABASE_URL}
       REDIS_URL: ${REDIS_URL}
       S3_ENDPOINT: ${S3_ENDPOINT}
@@ -39,6 +57,12 @@ services:
         condition: service_healthy
       minio:
         condition: service_started
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/api/v1/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
     networks:
       - app
 
