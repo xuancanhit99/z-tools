@@ -1,0 +1,25 @@
+{
+  "name": "@hyperz/web",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "next lint",
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No web tests yet\""
+  },
+  "dependencies": {
+    "next": "^14.2.24",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@hyperz/typescript-config": "workspace:*",
+    "@types/node": "^22.14.1",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.24",
+    "typescript": "^5.8.3"
+  }
+}

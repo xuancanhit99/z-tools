@@ -1,0 +1,3 @@
+{
+  "extends": "@hyperz/typescript-config/base.json"
+}
