@@ -61,7 +61,7 @@ export class AuthService implements OnModuleInit {
     return this.issueTokenPair(user);
   }
 
-  async register(email: string, password: string): Promise<LoginResponse> {
+  async register(email: string, password: string, name?: string): Promise<LoginResponse> {
     const normalizedEmail = email.trim().toLowerCase();
     const existingUser = await this.usersRepository.findOne({ where: { email: normalizedEmail } });
     if (existingUser) {
@@ -74,7 +74,8 @@ export class AuthService implements OnModuleInit {
         email: normalizedEmail,
         passwordHash,
         role: UserRole.USER,
-        isActive: true
+        isActive: true,
+        name: name ?? null
       })
     );
 

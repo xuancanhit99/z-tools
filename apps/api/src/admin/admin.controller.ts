@@ -31,6 +31,14 @@ export class AdminController {
     return this.adminService.listUsers(req.user.id, query.page, query.limit);
   }
 
+  @Get("users/:id")
+  getUser(
+    @Param("id", new ParseUUIDPipe({ version: "4" })) userId: string,
+    @Req() req: AuthenticatedRequest
+  ) {
+    return this.adminService.getUser(req.user.id, userId);
+  }
+
   @Patch("users/:id")
   updateUser(
     @Param("id", new ParseUUIDPipe({ version: "4" })) userId: string,

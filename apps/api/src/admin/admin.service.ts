@@ -74,6 +74,19 @@ export class AdminService {
     };
   }
 
+  async getUser(adminId: string, userId: string): Promise<AdminUserMutationResponse> {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId, deletedAt: IsNull() }
+    });
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+
+    await this.logAdminAction(adminId, "admin.users.get", user.id);
+
+    return this.toMutationResponse(user);
+  }
+
   async updateUser(adminId: string, userId: string, dto: UpdateAdminUserDto): Promise<AdminUserMutationResponse> {
     if (dto.role === undefined && dto.isActive === undefined) {
       throw new BadRequestException("At least one field must be provided");
