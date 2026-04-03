@@ -21,8 +21,8 @@ export default function LoginPage() {
   const searchParams = useSearchParams();
   const { signIn, status } = useAuth();
 
-  const [email, setEmail] = useState("admin@hyperz.local");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = useState<LoginFieldErrors>({});
@@ -108,10 +108,6 @@ export default function LoginPage() {
                 required
               />
             </Field>
-
-            <div className="helper-block">
-              Default seed credentials: <code>admin@hyperz.local</code> / <code>admin123</code>
-            </div>
 
             {error ? (
               <div className="alert alert-error" role="alert">
